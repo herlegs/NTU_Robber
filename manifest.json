@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "HelloCWS",
+  "name": "SwitchOff",
   "version": "1.0",
-  "description": "HelloCWS",
+  "description": "SwitchOff",
   "browser_action": {
     "default_icon": "favicon.png",
     "default_title": "Click Me",
