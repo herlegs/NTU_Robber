@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="/angular/angular-material.min.css">
+<link rel="stylesheet" href="popup.css">
+<style type="text/css">
+	#history{
+		width: 200px;
+		height: 400px;
+		overflow: auto;
+	}
+</style>
+</head>
+<body ng-app="NTU_Robber">
+	<div ng-controller="PopController as pop">
+		
+	
+
+		<div class="bottomRow">
+			<md-button class="md-fab md-mini md-primary" aria-label="Rob" ng-disabled="pop.bookingStarted"
+				ng-click="pop.startSeatBooking()">
+			  抢
+			</md-button>
+
+			<md-button class="md-fab md-mini" aria-label="Rob" ng-disabled="!pop.bookingStarted"
+				ng-click="pop.stopSeatBooking()">
+			  &times
+			</md-button>
+		</div>
+
+		
+
+	</div>
+<script src="jquery.js"></script>
+<script src="angular/angular.min.js"></script> 
+<script src="angular/angular-aria.min.js"></script> 
+<script src="angular/angular-animate.min.js"></script> 
+<script src="angular/angular-material.min.js"></script>
+<script src="app.js"></script>
+<script src="popup.js"></script>
+<script src="util.js"></script>
+<script src="constant.js"></script>
+</body>
+</html>

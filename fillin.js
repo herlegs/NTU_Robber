@@ -1,49 +1,113 @@
-$(function() {
-  $('#datainput tr td input').waitUntilExists(function() {
-    $('#datainput tr td input:eq(0)').val('your id');
-    $('#datainput tr td p input:eq(0)').click();
-  }, true);
+(function() {
+  var log_btn_selector = "body > form > table:nth-child(10) > tbody > tr > td:nth-child(1) > input[type='button']";
+  var cfm_btn_selector = "body > form > table:nth-child(18) > tbody > tr > td > input[type='button']";
+  var log_btn = $(log_btn_selector);
+  var cfm_btn = $(cfm_btn_selector);
+  var watcher;
+  var interval_default = 1000;
 
-  $('.mainmenuleft .menulist .menu a').waitUntilExists(function() {
-    $('.mainmenuleft .menulist .menu a').get(0).click();
-  }, true);
+  var log_hour = 9;
 
-  $('.lg-body tbody tr td a').waitUntilExists(function() {
-    $('.lg-body tbody tr td a').get(0).click();
-  }, true);
+  var min_range = [50, 59];
 
-  var dateObj = new Date();
-  var year = dateObj.getFullYear();
-  var month = dateObj.getMonth() + 1;
-  var day = dateObj.getDate();
+  var lastLogTime;
 
-  var hour = dateObj.getHours();
-  var minute = dateObj.getMinutes();
+  function getDetailTime(dateObj){
+    var year = dateObj.getFullYear();
+    var month = dateObj.getMonth() + 1;
+    var day = dateObj.getDate();
 
-  $('#BTNDTL'+year+'_'+month+'_'+day+'0').waitUntilExists(function() {
-    if ($(this).parent().prop('class') === 'mg_saved') {
-      chrome.extension.sendRequest({ message: "CLOSE" }, function () {});
-    } else {
-      $(this).click();
+    var hour = dateObj.getHours();
+    var minute = dateObj.getMinutes();
+
+    return {day: day, hour: hour, minute: minute};
+  }
+
+  function startWatcher(interval){
+    interval = interval || interval_default;
+    watcher = 
+      setTimeout(function(){
+        tryLogIn();
+      }, interval);
+  }
+
+  function tryLogIn(){
+    var nextTaskDelay = null;
+
+    log_btn = $(log_btn_selector);
+    cfm_btn = $(cfm_btn_selector);
+    if(log_btn.length){
+      //log in screen
+      if(isValidForLogIn()){
+        log_btn.get(0).click();
+        nextTaskDelay = 1000;
+      }
+      else{
+        nextTaskDelay = 1000*60*(min_range[1] - min_range[0])/2; //mins
+        nextTaskDelay = nextTaskDelay < 1000*30 ? 1000*30: nextTaskDelay;
+        nextTaskDelay = nextTaskDelay > 1000*60*5 ? 1000*60*5: nextTaskDelay;
+      }
     }
-  }, true);
+    
+    if(cfm_btn.length){
+      //confirm screen
+      var logTimeString = new Date().toString();
+      sendLogTime(logTimeString);
+      cfm_btn.get(0).click();
+      nextTaskDelay = 1000;
+    }
+    
+    startWatcher(nextTaskDelay);
+  }
 
-  $('.PmPanelEntryTimeWidgetAreaStyle .PmEventSpan:eq(1)').waitUntilExists(function() {
-    $('.PmPanelEntryTimeWidgetAreaStyle .PmEventSpan').get(1).click();
-  }, true);
+  function isValidForLogIn(){
+    if(isTodayWeekend()){
+      return false;
+    }
+    var now = getDetailTime(new Date());
+    var prev;
+    if(lastLogTime == null){
+      prev = getDetailTime(new Date());
+      prev.day -= 1;
+    }
+    else{
+      prev = getDetailTime(lastLogTime);
+    }
 
-  $('#PmDdEntryTimeInputWidget_0H').waitUntilExists(function() {
-    var workingHour = hour - 19 + 8;
-    workingHour = workingHour > 8 ? workingHour : 8;
-    $('#PmDdEntryTimeInputWidget_0H').val(workingHour);
-    $('#PmDdEntryTimeInputWidget_0M').val(minute);
+    if(now.hour == log_hour && now.minute >= min_range[0] && now.minute <= min_range[1]
+      && now.day != prev.day){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
 
-    $('#btnNext1').waitUntilExists(function() {
-      $(this).click();
-    }, true);
-  }, true);
+  function isTodayWeekend(){
+    var day = new Date().getDay();
+    return (day == 6) || (day == 0);    
+  }
 
-  $('#dSave1').waitUntilExists(function() {
-    $(this).click();
-  }, true);
-});
+  function isTodayExclusionDay(){
+
+  }
+
+  function sendLogTime(log_time){
+    chrome.runtime.sendMessage({type: "login", logTime: log_time}, function(response) {});
+  }
+
+  function startListener(){
+    chrome.runtime.onMessage.addListener(
+      function(request, sender, sendResponse) {
+        if (request.type == "logstatus" && request.lastLogTime){
+          lastLogTime = new Date(request.lastLogTime);
+        }
+    });
+  }
+
+
+  //start execution
+  startWatcher();
+  startListener();
+
+})();

@@ -1,12 +1,13 @@
 {
   "manifest_version": 2,
-  "name": "SwitchOff",
+  "name": "robber",
   "version": "1.0",
-  "description": "SwitchOff",
+  "description": "robber",
   "browser_action": {
-    "default_icon": "favicon.png",
-    "default_title": "Click Me",
-    "name": "Click me"
+    "default_icon": "rob.png",
+    "default_title": "rob it",
+    "name": "rob me",
+    "default_popup":"popup.html"
   },
   "permissions": [
     "tabs",
@@ -16,6 +17,15 @@
   "background":{
     "scripts": [
       "background.js"
+
     ]
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["http://www.ntu.edu.sg/has/SnR/SportsFacilities*"],
+      "js": [
+        "jquery.js"
+      ]
+    }
+  ]
 }
