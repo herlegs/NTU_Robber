@@ -1,100 +1,79 @@
-(function() {
-  var log_btn_selector = "body > form > table:nth-child(10) > tbody > tr > td:nth-child(1) > input[type='button']";
-  var cfm_btn_selector = "body > form > table:nth-child(18) > tbody > tr > td > input[type='button']";
-  var log_btn = $(log_btn_selector);
-  var cfm_btn = $(cfm_btn_selector);
-  var watcher;
-  var interval_default = 1000;
+(function($) {
+	var constant = NTURobber.constant;
 
-  var log_hour = 9;
+	var interval_default = 1000;
 
-  var min_range = [50, 59];
+	var username = "xcao002";
+	var password = "664716aBC";
 
-  var lastLogTime;
+	var pre_login_selector = "#ui_body_container > form > table > tbody > tr:nth-child(4) > td:nth-child(2) > li > a";
 
-  function getDetailTime(dateObj){
-    var year = dateObj.getFullYear();
-    var month = dateObj.getMonth() + 1;
-    var day = dateObj.getDate();
+	var username_input_selector = '#ui_body_container > table > tbody > tr:nth-child(2) > td > form > center > table > tbody > tr > td > table > tbody > tr:nth-child(2) > td:nth-child(2) > input[type="text"]';
 
-    var hour = dateObj.getHours();
-    var minute = dateObj.getMinutes();
+	var password_input_selector = '#ui_body_container > table > tbody > tr:nth-child(2) > td > form > center:nth-child(2) > table > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > input[type="password"]';
 
-    return {day: day, hour: hour, minute: minute};
-  }
+	var login_ok_btn = 'input[name="bOption"]';
+
+	function isElementExist(selector){
+		var element = $(selector);
+		if(element.length){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	function getStage(){
+		if(isElementExist(pre_login_selector)){
+			return {
+				stage: constant.STAGE.PRE_LOGIN,
+				pre_login_btn: $(pre_login_selector)
+			}
+		}
+		if(isElementExist(username_input_selector)){
+			return {
+				stage: constant.STAGE.USERNAME,
+				username_input: $(username_input_selector)
+			}
+		}
+		if(isElementExist(password_input_selector)){
+			return {
+				stage: constant.STAGE.PASSWORD,
+				password_input: $(password_input_selector)
+			}
+		}
+	}
 
   function startWatcher(interval){
     interval = interval || interval_default;
     watcher = 
       setTimeout(function(){
-        tryLogIn();
+        action();
       }, interval);
   }
 
-  function tryLogIn(){
+  function action(){
     var nextTaskDelay = null;
 
-    log_btn = $(log_btn_selector);
-    cfm_btn = $(cfm_btn_selector);
-    if(log_btn.length){
-      //log in screen
-      if(isValidForLogIn()){
-        log_btn.get(0).click();
-        nextTaskDelay = 1000;
-      }
-      else{
-        nextTaskDelay = 1000*60*(min_range[1] - min_range[0])/2; //mins
-        nextTaskDelay = nextTaskDelay < 1000*30 ? 1000*30: nextTaskDelay;
-        nextTaskDelay = nextTaskDelay > 1000*60*5 ? 1000*60*5: nextTaskDelay;
-      }
-    }
-    
-    if(cfm_btn.length){
-      //confirm screen
-      var logTimeString = new Date().toString();
-      sendLogTime(logTimeString);
-      cfm_btn.get(0).click();
-      nextTaskDelay = 1000;
-    }
+	var stageInfo = getStage();
+
+	if(stageInfo.stage == constant.STAGE.PRE_LOGIN){
+		stageInfo.pre_login_btn.get(0).click();
+	}
+	else if(stageInfo.stage == constant.STAGE.USERNAME){
+		stageInfo.username_input.val(username);
+		$(login_ok_btn).get(0).click();
+	}
+	else if(stageInfo.stage == constant.STAGE.PASSWORD){
+		stageInfo.password_input.val(password);
+		$(login_ok_btn).get(0).click();
+	}
     
     startWatcher(nextTaskDelay);
   }
 
-  function isValidForLogIn(){
-    if(isTodayWeekend()){
-      return false;
-    }
-    var now = getDetailTime(new Date());
-    var prev;
-    if(lastLogTime == null){
-      prev = getDetailTime(new Date());
-      prev.day -= 1;
-    }
-    else{
-      prev = getDetailTime(lastLogTime);
-    }
 
-    if(now.hour == log_hour && now.minute >= min_range[0] && now.minute <= min_range[1]
-      && now.day != prev.day){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-
-  function isTodayWeekend(){
-    var day = new Date().getDay();
-    return (day == 6) || (day == 0);    
-  }
-
-  function isTodayExclusionDay(){
-
-  }
-
-  function sendLogTime(log_time){
-    chrome.runtime.sendMessage({type: "login", logTime: log_time}, function(response) {});
-  }
 
   function startListener(){
     chrome.runtime.onMessage.addListener(
@@ -110,4 +89,4 @@
   startWatcher();
   startListener();
 
-})();
+})(jQuery);

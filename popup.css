@@ -1,3 +1,7 @@
 .bottomRow{
 	white-space: nowrap;
 }
+
+.bottomRow > div{
+	display: inline-block;
+}

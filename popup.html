@@ -3,27 +3,23 @@
 <head>
 <link rel="stylesheet" href="/angular/angular-material.min.css">
 <link rel="stylesheet" href="popup.css">
-<style type="text/css">
-	#history{
-		width: 200px;
-		height: 400px;
-		overflow: auto;
-	}
-</style>
 </head>
-<body ng-app="NTU_Robber">
-	<div ng-controller="PopController as pop">
+<body data-ng-app="NTU_Robber">
+	<div data-ng-controller="PopController as pop">
 		
 	
 
 		<div class="bottomRow">
-			<md-button class="md-fab md-mini md-primary" aria-label="Rob" ng-disabled="pop.bookingStarted"
-				ng-click="pop.startSeatBooking()">
+			<md-button class="md-fab md-mini md-primary" aria-label="Rob" data-ng-disabled="pop.bookingStarted"
+			data-ng-click="pop.startSeatBooking()"
+				>
 			  抢
 			</md-button>
+			
 
-			<md-button class="md-fab md-mini" aria-label="Rob" ng-disabled="!pop.bookingStarted"
-				ng-click="pop.stopSeatBooking()">
+			<md-button class="md-fab md-mini" aria-label="Rob" data-ng-disabled="!pop.bookingStarted"
+			data-ng-click="pop.stopSeatBooking()"
+				>
 			  &times
 			</md-button>
 		</div>

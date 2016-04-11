@@ -2,9 +2,9 @@
 	var util = NTURobber.util;
 	var constant = NTURobber.constant;
 
-	var dependency = ['utilService', PopController];
-
 	var app = angular.module('NTU_Robber');
+	
+	var dependency = ['$scope', PopController]
 
 	app.controller("PopController", dependency);
 
@@ -19,14 +19,13 @@
 
 	PopController.prototype.bindEvents = function(){
 		var vm = this;
-		chrome.runtime.onMessage.addListener(
-		  function(request, sender, sendResponse) {
-		  	alert("recieve" + request.type)
-		    if(request.type == "login"){
-		    	refreshHistoryList();
-		    }
-		  }
-		);
+		util.sendMessage({
+			type: constant.EVENT_TYPE.CHECK_STATUS
+		}, 
+		function(response){
+			vm.bookingStarted = response.started;
+			vm.param.$scope.$apply();
+		});
 	}
 
 	PopController.prototype.startSeatBooking = function(){
@@ -44,7 +43,7 @@
 	}
 
 
-
-
 })(jQuery);
+
+
 

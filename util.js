@@ -16,24 +16,11 @@ var NTURobber = NTURobber ? NTURobber : {util: {}, constant: {}};
 
 	util.sendMessage = function(message, callback){
 		chrome.runtime.sendMessage(message, function(response) {
-			alert("sent"+message.type);
+			//alert("sent by util: "+message.type);
 			if(util.isFunction(callback)){
 				callback(response);
 			}
 		});
-	}
-})();
-
-(function(){
-	
-	var dependency = ["$rootScope", UtilService];
-
-	var app = angular.module('NTU_Robber');
-
-	app.service("utilService", dependency);
-
-	function UtilService(){
-
 	}
 })();
 
