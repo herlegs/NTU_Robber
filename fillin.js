@@ -1,6 +1,8 @@
 (function($) {
 	var constant = NTURobber.constant;
 
+	var choosenCategory = constant.CATEGORY.badminton;
+
 	var interval_default = 1000;
 
 	var username = "xcao002";
@@ -13,6 +15,10 @@
 	var password_input_selector = '#ui_body_container > table > tbody > tr:nth-child(2) > td > form > center:nth-child(2) > table > tbody > tr > td > table > tbody > tr:nth-child(3) > td:nth-child(2) > input[type="password"]';
 
 	var login_ok_btn = 'input[name="bOption"]';
+
+	var category_list = "input[name='p_info']";
+
+	var watcher;
 
 	function isElementExist(selector){
 		var element = $(selector);
@@ -43,6 +49,12 @@
 				password_input: $(password_input_selector)
 			}
 		}
+		if(isElementExist(category_list)){
+			return {
+				stage: constant.STAGE.CATEGORY,
+				category_list: $(category_list)
+			}
+		}
 	}
 
   function startWatcher(interval){
@@ -68,6 +80,10 @@
 	else if(stageInfo.stage == constant.STAGE.PASSWORD){
 		stageInfo.password_input.val(password);
 		$(login_ok_btn).get(0).click();
+	}
+	else if(stageInfo.stage == constant.STAGE.CATEGORY){
+		var categoryBtn = stageInfo.category_list.eq(choosenCategory.id);
+		categoryBtn.get(0).click();
 	}
     
     startWatcher(nextTaskDelay);
