@@ -3,13 +3,21 @@ var util = NTURobber.util;
 
 var started = false;
 var chosenCategory = constant.CATEGORY.badminton;
+var chosenDate = new Date();
+var chosenRange = [0,1];
+var username = "xcao002";
+var password = "664716aBC";
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	if (request.type == constant.EVENT_TYPE.CHECK_STATUS){
 		sendResponse({
 			started: started,
-			chosenCategoryKey: chosenCategory.key
+			chosenCategoryKey: chosenCategory.key,
+			chosenDate: chosenDate.toString(),
+			chosenRange: chosenRange.toString(),
+			username: username,
+			password: password
 		});
     }
     if (request.type == constant.EVENT_TYPE.START_BOOKING){

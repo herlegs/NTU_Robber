@@ -17,14 +17,15 @@
 
 		vm.bookingStarted = false;
 		vm.chosenCategoryKey = vm.categoryList.squash.key;
-		vm.chosenDate = new Date();
+		vm.chosenDate;
 		vm.minDate = new Date();
-		vm.startTime = vm.getStartTimeList()[0];
-		vm.endTime = vm.getEndTimeList()[0];
-		vm.username = "xcao002";
-		vm.password = "664716aBC";
+		vm.startTime;
+		vm.endTime;
+		vm.chosenRange;
+		vm.username = "";
+		vm.password = "";
 
-		vm.bindEvents();
+		vm.updateStatus();
 	}
 	
 	PopController.prototype.getTimeList = function(){
@@ -45,17 +46,25 @@
 		return timeList.slice(startTimeIndex + 1);
 	}
 
-	PopController.prototype.bindEvents = function(){
+	PopController.prototype.updateStatus = function(){
 		var vm = this;
-		util.sendMessage({
+		chrome.runtime.sendMessage({
 			type: constant.EVENT_TYPE.CHECK_STATUS
 		}, 
-		function(response){
-			vm.bookingStarted = response.started;
-			vm.chosenCategoryKey = response.chosenCategoryKey;
+		vm.updateStatusWithResponse.bind(vm));
+	}
 	
-			vm.param.$scope.$apply();
-		});
+	PopController.prototype.updateStatusWithResponse = function(response){
+		var vm = this;
+		vm.bookingStarted = response.started;
+		vm.chosenCategoryKey = response.chosenCategoryKey;
+		vm.chosenDate = vm.bookingStarted ? new Date(response.chosenDate) : new Date();
+		vm.chosenRange = response.chosenRange.split(",");
+		vm.startTime = vm.getTimeList()[vm.chosenRange[0]];
+		vm.endTime = vm.getTimeList()[vm.chosenRange[1]];
+		vm.username = response.username;
+		vm.password = response.password;
+		vm.param.$scope.$apply();
 	}
 
 	PopController.prototype.startSeatBooking = function(){
