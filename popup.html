@@ -5,9 +5,60 @@
 <link rel="stylesheet" href="popup.css">
 </head>
 <body data-ng-app="NTU_Robber">
-	<div data-ng-controller="PopController as pop">
+	<div id="panel" data-ng-controller="PopController as pop">
+		<div id="setting_category">
+			<md-input-container>
+				<label>Category</label>
+				<md-select ng-model="pop.chosenCategoryKey">
+					<md-option ng-repeat="(categoryKey, categoryObject) in pop.categoryList" value="{{categoryKey}}" 
+					ng-disabled="pop.bookingStarted">
+						{{categoryObject.name}}
+					</md-option>
+				</md-select>
+			</md-input-container>
+			
+			<md-datepicker ng-model="pop.chosenDate" md-placeholder="Select Date" md-min-date="pop.minDate" 			ng-disabled="pop.bookingStarted"></md-datepicker>
+		</div>
 		
-	
+		<div id="setting_timerange">
+			<md-input-container>
+				<label>Start From</label>
+				<md-select ng-model="pop.startTime">
+					<md-option ng-repeat="time in pop.getStartTimeList()" value="{{time}}" 
+					ng-disabled="pop.bookingStarted">
+						{{time}}
+					</md-option>
+				</md-select>
+			</md-input-container>
+			
+			<md-input-container>
+				<label>End By</label>
+				<md-select ng-model="pop.endTime">
+					<md-option ng-repeat="time in pop.getEndTimeList()" value="{{time}}" 
+					ng-disabled="pop.bookingStarted">
+						{{time}}
+					</md-option>
+				</md-select>
+			</md-input-container>
+		</div>
+		
+		<div id="setting_userinfo">
+			<md-input-container class="">
+				<!-- Use floating label instead of placeholder -->
+				<label>User name</label>
+				<input ng-model="pop.username" type="text">
+			</md-input-container>
+			
+			<md-input-container class="">
+				<!-- Use floating label instead of placeholder -->
+				<label>Password</label>
+				<input ng-model="pop.password" type="password">
+			</md-input-container>
+		</div>
+		
+		<div id="feedback">
+		
+		</div>
 
 		<div class="bottomRow">
 			<md-button class="md-fab md-mini md-primary" aria-label="Rob" data-ng-disabled="pop.bookingStarted"
@@ -20,6 +71,9 @@
 			<md-button class="md-fab md-mini" aria-label="Rob" data-ng-disabled="!pop.bookingStarted"
 			data-ng-click="pop.stopSeatBooking()"
 				>
+				<md-tooltip md-visible="demo.showTooltip" md-direction="{{demo.tipDirection}}">
+					Close Process
+				</md-tooltip>
 			  &times
 			</md-button>
 		</div>

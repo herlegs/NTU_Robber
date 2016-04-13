@@ -21,8 +21,8 @@ var NTURobber = NTURobber ? NTURobber : {util: {}, constant: {}};
 	constant.CATEGORY = {
 		badminton: {id: 0, key: "badminton", name: "Badminton", range: [2, 19], tables: 4},
 		squash: {id: 1, key: "squash", name: "Squash", range: [2, 19], tables: 4},
-		table_tennis_at_srctr: {id: 2, key: "table_tennis_at_srctr", name: "Table Tennis Table(S & R Ctr)", range: [2, 19], tables: 4},
-		table_tennis_at_squash: {id: 3, key: "table_tennis_at_squash", name: "Table Tennis Table(At Squash Court 4 during period 8 Apr to 13 May 16)", range: [2, 19], tables: 2},
+		table_tennis_at_srctr: {id: 2, key: "table_tennis_at_srctr", name: "Table Tennis(S & R Ctr)", range: [2, 19], tables: 4},
+		table_tennis_at_squash: {id: 3, key: "table_tennis_at_squash", name: "Table Tennis(Squash Court 4)", range: [2, 19], tables: 2},
 		tennis_at_hall7: {id: 4, key: "tennis_at_hall7", name: "Tennis Court(Hall 7)", range: [2, 18], tables: 2},
 		tennis_at_srctr: {id: 5, key: "tennis_at_srctr", name: "Tennis Court(S & R Ctr)", range: [0, 19], tables: 6}
 	}

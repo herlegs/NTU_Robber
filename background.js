@@ -2,12 +2,14 @@ var constant = NTURobber.constant;
 var util = NTURobber.util;
 
 var started = false;
+var chosenCategory = constant.CATEGORY.badminton;
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	if (request.type == constant.EVENT_TYPE.CHECK_STATUS){
 		sendResponse({
-			started: started
+			started: started,
+			chosenCategoryKey: chosenCategory.key
 		});
     }
     if (request.type == constant.EVENT_TYPE.START_BOOKING){
