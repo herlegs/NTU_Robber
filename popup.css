@@ -19,7 +19,22 @@ body{
 
 #setting_timerange > md-input-container{
 	margin-right: 35px;
+	width: 130px;
 }
+
+#setting_userinfo > md-input-container{
+	margin-right: 35px;
+	width: 130px;
+}
+
+span.success{
+	color: #9ccc65;
+}
+
+span.trying{
+	color: #bbb;
+}
+
 
 
 

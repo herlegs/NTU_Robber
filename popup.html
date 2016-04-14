@@ -17,7 +17,7 @@
 				</md-select>
 			</md-input-container>
 			
-			<md-datepicker ng-model="pop.chosenDate" md-placeholder="Select Date" md-min-date="pop.minDate" 			ng-disabled="pop.bookingStarted"></md-datepicker>
+			<md-datepicker ng-model="pop.chosenDate" md-placeholder="Select Date" md-min-date="pop.minDate" ng-disabled="pop.bookingStarted"></md-datepicker>
 		</div>
 		
 		<div id="setting_timerange">
@@ -44,20 +44,19 @@
 		
 		<div id="setting_userinfo">
 			<md-input-container class="">
-				<!-- Use floating label instead of placeholder -->
 				<label>User name</label>
-				<input ng-model="pop.username" type="text">
+				<input ng-model="pop.username" type="text" required data-ng-disabled="pop.bookingStarted">
 			</md-input-container>
 			
 			<md-input-container class="">
-				<!-- Use floating label instead of placeholder -->
 				<label>Password</label>
-				<input ng-model="pop.password" type="password">
+				<input ng-model="pop.password" type="password" required data-ng-disabled="pop.bookingStarted">
 			</md-input-container>
 		</div>
 		
 		<div id="feedback">
-		
+			<span ng-show="pop.success" class="success">You have booked {{pop.bookedInfo}}!</span>
+			<span ng-show="!pop.success" class="trying">{{pop.bookedInfo}}</span>
 		</div>
 
 		<div class="bottomRow">

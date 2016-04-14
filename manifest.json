@@ -2,11 +2,11 @@
   "manifest_version": 2,
   "name": "robber",
   "version": "1.0",
-  "description": "robber",
+  "description": "seat robber",
   "browser_action": {
     "default_icon": "rob.png",
-    "default_title": "rob it",
-    "name": "rob me",
+    "default_title": "robber",
+    "name": "robber",
     "default_popup":"popup.html"
   },
   "permissions": [
