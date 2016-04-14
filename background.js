@@ -5,8 +5,8 @@ var started = false;
 var chosenCategoryKey = constant.CATEGORY.badminton.key;
 var chosenDate = new Date();
 var chosenRange = [-1, -1];
-var username = "xcao002";
-var password = "664716aBC";
+var username = "";
+var password = "";
 
 var success = false;
 var bookedInfo = "";
